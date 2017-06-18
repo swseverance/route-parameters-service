@@ -105,24 +105,18 @@ export class RouteParamsService {
 import { Router } from '@angular/router';
 import { TestBed, inject } from '@angular/core/testing';
 
+import { createTree } from '../testing';
 import { RouteParamsService } from './route-params.service';
 
 describe('RouteParamsService', () => {
   describe('getParams()', () => {
-    const activatedRouteSnapshotTwo = {
-      params: { teacherId: '99' },
-      firstChild: null
-    };
-
-    const activatedRouteSnapshotOne = {
-      params: { schoolId: '03' },
-      firstChild: activatedRouteSnapshotTwo
-    };
-
     const routerStub = {
       routerState: {
         snapshot: {
-          root: activatedRouteSnapshotOne
+          root: createTree(
+            { params: { schoolId: '03' } },
+            { params: { teacherId: '99' } }
+          )
         }
       }
     };
@@ -145,43 +139,17 @@ describe('RouteParamsService', () => {
   });
 
   describe('setParams()', () => {
-    const activatedRouteSnapshotV = {
-      routeConfig: {
-        path: 'teacher/:teacherId'
-      },
-      firstChild: null
-    };
-
-    const activatedRouteSnapshotIV = {
-      routeConfig: {
-        path: ':schoolId'
-      },
-      firstChild: activatedRouteSnapshotV
-    };
-
-    const activatedRouteSnapshotIII = {
-      routeConfig: {
-        path: 'school'
-      },
-      firstChild: activatedRouteSnapshotIV
-    };
-
-    const activatedRouteSnapshotII = {
-      routeConfig: {
-        path: ''
-      },
-      firstChild: activatedRouteSnapshotIII
-    };
-
-    const activatedRouteSnapshotI = {
-      firstChild: activatedRouteSnapshotII
-    };
-
     const routerStub = {
       routerState: {
         snapshot: {
           url: '/school/2/teacher/4?hello=true',
-          root: activatedRouteSnapshotI
+          root: createTree(
+            { routeConfig: null },
+            { routeConfig: { path: '' } },
+            { routeConfig: { path: 'school' } },
+            { routeConfig: { path: ':schoolId' } },
+            { routeConfig: { path: 'teacher/:teacherId' } }
+          )
         }
       }
     };
